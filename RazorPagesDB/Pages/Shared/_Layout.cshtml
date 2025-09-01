@@ -1,101 +1,48 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - WARazorDB</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WARazorDB.styles.css" asp-append-version="true" />
-    <style>
-        body {
-            background: black; /* gris azulado claro */
-            font-family: "Segoe UI", Roboto, sans-serif;
-        }
-
-        .navbar {
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); /* degradado azul */
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            color: #fff !important;
-            letter-spacing: 1px;
-        }
-
-        .nav-link {
-            color: #fff !important;
-            transition: color 0.2s;
-        }
-
-        .nav-link:hover {
-            color: #ffeb3b !important; /* amarillo al pasar */
-        }
-
-        footer {
-            background-color: #343a40;
-            color: #adb5bd;
-            padding: 15px 0;
-        }
-
-        footer a {
-            color: #ffeb3b;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm shadow-sm">
+        <nav class="navbar navbar-expand-sm shadow-sm gradient-navbar">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">WARazorDB</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                <div id="mainNav" class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link nav-link-white" asp-area="" asp-page="/Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-white" asp-area="" asp-page="/Privacy">Privacy</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container mt-4">
-        <main role="main" class="pb-3">
+    <main role="main" class="flex-fill">
+        <div class="container py-4">
             @RenderBody()
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <footer class="text-center">
-        <div class="container">
-            &copy; 2025 - WARazorDB - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="footer-elevated mt-auto">
+        <div class="container text-center small">
+            &copy; @DateTime.Now.Year - WARazorDB - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

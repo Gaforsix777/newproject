@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
-using RazorPagesDB.data;
+using RazorPagesDB.Data;
 
 namespace RazorPagesDB
 {

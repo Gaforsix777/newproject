@@ -1,53 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RazorPagesDB.Data;          // <- si tu DbContext está en RazorPagesDB.data, cambia esta línea por RazorPagesDB.data
 using RazorPagesDB.Models;
-using RazorPagesDB.data;
 
 namespace RazorPagesDB.Pages
 {
     public class EditModel : PageModel
     {
-        private readonly RazorPagesDB.data.TareaDbContext _context;
-
-        public EditModel(RazorPagesDB.data.TareaDbContext context)
-        {
-            _context = context;
-        }
+        private readonly TareaDbContext _context;
+        public EditModel(TareaDbContext context) => _context = context;
 
         [BindProperty]
-        public Tarea Tarea { get; set; } = default!;
+        public Tarea Tarea { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var tarea =  await _context.Tareas.FirstOrDefaultAsync(m => m.Id == id);
-            if (tarea == null)
-            {
-                return NotFound();
-            }
-            Tarea = tarea;
+            // Sin tracking para leer (mejor performance)
+            var entity = await _context.Tareas
+                                       .AsNoTracking()
+                                       .FirstOrDefaultAsync(m => m.Id == id);
+            if (entity == null) return NotFound();
+
+            Tarea = entity;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
+            // Adjuntar el modelo editado y marcarlo como modificado
             _context.Attach(Tarea).State = EntityState.Modified;
 
             try
@@ -56,22 +41,15 @@ namespace RazorPagesDB.Pages
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TareaExists(Tarea.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Si otro proceso borró la entidad, devolvemos 404
+                var stillExists = await _context.Tareas.AnyAsync(e => e.Id == Tarea.Id);
+                if (!stillExists) return NotFound();
+
+                // Si fue otro tipo de conflicto, relanzamos
+                throw;
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool TareaExists(int id)
-        {
-            return _context.Tareas.Any(e => e.Id == id);
         }
     }
 }

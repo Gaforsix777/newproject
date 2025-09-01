@@ -1,49 +1,54 @@
 ﻿@page
 @model RazorPagesDB.Pages.CreateModel
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nueva Tarea";
 }
 
-<h1>Create</h1>
+<div class="card border-0 shadow-sm mt-3">
+    <div class="card-body">
+        <h2 class="h5 mb-3">Nueva Tarea</h2>
 
-<h4>Tarea</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Tarea.nombreTarea" class="control-label"></label>
+        <form method="post" novalidate>
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="Tarea.nombreTarea" class="form-label"></label>
                 <input asp-for="Tarea.nombreTarea" class="form-control" />
                 <span asp-validation-for="Tarea.nombreTarea" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tarea.fechaVencimiento" class="control-label"></label>
-                <input asp-for="Tarea.fechaVencimiento" class="form-control" />
+
+            <div class="mb-3">
+                <label asp-for="Tarea.fechaVencimiento" class="form-label"></label>
+                <input asp-for="Tarea.fechaVencimiento" class="form-control" type="date" />
                 <span asp-validation-for="Tarea.fechaVencimiento" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tarea.estado" class="control-label"></label>
-                <input asp-for="Tarea.estado" class="form-control" />
+
+            <div class="mb-3">
+                <label asp-for="Tarea.estado" class="form-label"></label>
+                <select asp-for="Tarea.estado" class="form-select">
+                    <option value="">-- Selecciona --</option>
+                    <option>Pendiente</option>
+                    <option>En Progreso</option>
+                    <option>Completada</option>
+                </select>
                 <span asp-validation-for="Tarea.estado" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tarea.IdUsuario" class="control-label"></label>
-                <input asp-for="Tarea.IdUsuario" class="form-control" />
+
+            <div class="mb-4">
+                <label asp-for="Tarea.IdUsuario" class="form-label"></label>
+                <input asp-for="Tarea.IdUsuario" class="form-control" type="number" min="1" />
                 <span asp-validation-for="Tarea.IdUsuario" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Crear</button>
+                <a asp-page="./Index" class="btn btn-outline-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

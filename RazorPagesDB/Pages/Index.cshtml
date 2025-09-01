@@ -1,54 +1,64 @@
 ﻿@page
 @model RazorPagesDB.Pages.IndexModel
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tareas";
 }
 
-<h1>Index</h1>
+<div class="card border-0 shadow-sm mt-3">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h4 mb-0">Tareas</h2>
+            <a asp-page="Create" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Nueva Tarea
+            </a>
+        </div>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarea[0].nombreTarea)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarea[0].fechaVencimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarea[0].estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarea[0].IdUsuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Tarea) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nombreTarea)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.fechaVencimiento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdUsuario)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        @if (Model.Tarea == null || !Model.Tarea.Any())
+        {
+            <div class="alert alert-info mb-0">
+                No hay tareas registradas todavía. Crea la primera con el botón “Nueva Tarea”.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => m.Tarea[0].nombreTarea)</th>
+                            <th>@Html.DisplayNameFor(m => m.Tarea[0].fechaVencimiento)</th>
+                            <th>@Html.DisplayNameFor(m => m.Tarea[0].estado)</th>
+                            <th class="text-center">@Html.DisplayNameFor(m => m.Tarea[0].IdUsuario)</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Tarea)
+                        {
+                            var badge = Model.GetEstadoBadge(item.estado);
+                            <tr>
+                                <td class="fw-medium">@item.nombreTarea</td>
+                                <td>
+                                    @item.fechaVencimiento.ToString("dd/MM/yyyy")
+                                    @if (item.fechaVencimiento.Date < DateTime.Today && !string.Equals(item.estado, "Completada", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge badge-vencida ms-2">Vencida</span>
+                                    }
+                                </td>
+                                <td><span class="badge @badge">@item.estado</span></td>
+                                <td class="text-center">@item.IdUsuario</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm">Detalles</a>
+                                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Editar</a>
+                                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
