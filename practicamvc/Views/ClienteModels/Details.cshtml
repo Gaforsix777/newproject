@@ -1,0 +1,26 @@
+﻿@model practicamvc.Models.ClienteModel
+@{
+    ViewData["Title"] = "Detalle de cliente";
+}
+
+<div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Cliente #@Model.Id</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Dirección</dt>
+            <dd class="col-sm-9">@Model.Direccion</dd>
+        </dl>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+    </div>
+</div>

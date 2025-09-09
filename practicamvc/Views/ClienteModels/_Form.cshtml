@@ -1,0 +1,21 @@
+﻿@model practicamvc.Models.ClienteModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="mb-3">
+    <label asp-for="Nombre" class="form-label"></label>
+    <input asp-for="Nombre" class="form-control" placeholder="Nombre y apellidos" />
+    <span asp-validation-for="Nombre" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Email" class="form-label"></label>
+    <input asp-for="Email" class="form-control" placeholder="cliente@correo.com" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Direccion" class="form-label"></label>
+    <input asp-for="Direccion" class="form-control" placeholder="Calle, número, zona" />
+    <span asp-validation-for="Direccion" class="text-danger"></span>
+</div>

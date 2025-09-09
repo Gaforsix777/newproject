@@ -1,0 +1,119 @@
+﻿@{
+    var title = ViewData["Title"] as string ?? "Artesanías";
+    string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+}
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title - Artesanías</title>
+
+    <link rel="icon" type="image/png" href="~/favicon.ico" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                <span class="logo-dot"></span> Artesanías
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="mainNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link @(currentController=="ProductoModels"||currentController=="Producto" ? "active" : "")"
+                           asp-controller="ProductoModels" asp-action="Index">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentController=="ClienteModels" ? "active" : "")"
+                           asp-controller="ClienteModels" asp-action="Index">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentController=="PedidoModels" ? "active" : "")"
+                           asp-controller="PedidoModels" asp-action="Index">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentController=="DetallePedidoModels" ? "active" : "")"
+                           asp-controller="DetallePedidoModels" asp-action="Index">Detalles</a>
+                    </li>
+                </ul>
+
+                <!-- Buscador global (opcional) -->
+                <form class="d-none d-lg-flex me-3" method="get" asp-controller="@currentController" asp-action="Index">
+                    <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
+                </form>
+
+                <!-- Toggle tema -->
+                <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" title="Cambiar tema">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alerts TempData -->
+    <div class="container mt-3">
+        @if (TempData["Success"] is string ok && !string.IsNullOrWhiteSpace(ok))
+        {
+            <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm" role="alert">
+                @ok
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+        {
+            <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm" role="alert">
+                @err
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
+    <!-- Main -->
+    <main class="container py-4">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-top py-4 mt-auto">
+        <div class="container d-flex flex-wrap gap-2 justify-content-between align-items-center text-muted small">
+            <span>© @DateTime.Now.Year — Artesanías</span>
+            <span>Controlador: <strong>@currentController</strong> · Acción: <strong>@currentAction</strong></span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- Tema claro/oscuro persistente ---
+        const root = document.documentElement;
+        const key = "artesanias-theme";
+        const btn = document.getElementById("themeToggle");
+
+        function applyTheme(t) {
+            root.setAttribute("data-theme", t);
+            if (btn) btn.textContent = t === "dark" ? "☀️" : "🌙";
+        }
+        const saved = localStorage.getItem(key) || "light";
+        applyTheme(saved);
+        btn?.addEventListener("click", () => {
+            const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+            localStorage.setItem(key, next);
+            applyTheme(next);
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

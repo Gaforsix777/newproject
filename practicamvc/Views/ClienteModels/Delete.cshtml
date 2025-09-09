@@ -1,0 +1,31 @@
+﻿@model practicamvc.Models.ClienteModel
+@{
+    ViewData["Title"] = "Eliminar cliente";
+}
+
+<div class="alert alert-warning d-flex align-items-center rounded-4 mb-3" role="alert">
+    <div>
+        <strong>¿Seguro que quieres eliminar este cliente?</strong> Esta acción no se puede deshacer.
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4 mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Dirección</dt>
+            <dd class="col-sm-9">@Model.Direccion</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>

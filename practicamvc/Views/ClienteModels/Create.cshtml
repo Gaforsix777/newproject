@@ -1,0 +1,29 @@
+﻿@model practicamvc.Models.ClienteModel
+@{
+    ViewData["Title"] = "Nuevo cliente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-primary text-white rounded-top-4">
+                <h5 class="mb-0">Registrar cliente</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create">
+                    @await Html.PartialAsync("_Form", Model)
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-round">Guardar</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-round">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+ }

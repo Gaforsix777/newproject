@@ -1,0 +1,60 @@
+:root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --text: #212529;
+    --muted: #6c757d;
+    --ring: rgba(13,110,253,.25);
+}
+
+html[data-theme="dark"] {
+    --bg: #121418;
+    --card: #1b1f24;
+    --text: #e9ecef;
+    --muted: #a0a6ad;
+    --ring: rgba(255,255,255,.15);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.card, .table, .alert {
+    background: var(--card);
+    color: var(--text);
+}
+
+    .table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+.form-control, .form-select {
+    background: var(--card);
+    color: var(--text);
+    border-radius: 0.75rem;
+}
+
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 .25rem var(--ring);
+    }
+
+.btn-round {
+    border-radius: 999px;
+}
+
+.logo-dot {
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.2) inset;
+}
+
+.navbar .nav-link.active {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+}
