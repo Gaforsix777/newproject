@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,18 @@ builder.Services.AddDbContext<practicamvc.Data.ArtesaniasDBContext>(options =>
 
 var app = builder.Build();
 
+// --- Cultura: coma decimal (ej. 05,50 -> 5,50) ---
+var culture = new CultureInfo("es-BO");
+culture.NumberFormat.NumberDecimalSeparator = ",";
+culture.NumberFormat.NumberGroupSeparator = ".";
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
+// -------------------------------------------------
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

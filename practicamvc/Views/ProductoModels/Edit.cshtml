@@ -13,27 +13,37 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Descripcion" class="control-label"></label>
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Precio" class="control-label"></label>
-                <input asp-for="Precio" class="form-control" />
+                <input asp-for="Precio"
+                       type="text"
+                       class="form-control"
+                       inputmode="decimal"
+                       autocomplete="off"
+                       asp-format="{0:N2}" />
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Stock" class="control-label"></label>
                 <input asp-for="Stock" class="form-control" />
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mt-2">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -45,5 +55,24 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        if (window.jQuery && $.validator && $.validator.methods) {
+            var origRange = $.validator.methods.range;
+            $.validator.methods.number = function (value, element) {
+                if (this.optional(element)) return true;
+                var val = value.replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+                return !isNaN(val) && isFinite(val);
+            };
+            $.validator.methods.range = function (value, element, param) {
+                var val = value.replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+                return origRange.call(this, val, element, param);
+            };
+        }
+    </script>
+}
+
 }

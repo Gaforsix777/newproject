@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using practicamvc.Data;
 
@@ -11,9 +12,11 @@ using practicamvc.Data;
 namespace practicamvc.Migrations
 {
     [DbContext(typeof(ArtesaniasDBContext))]
-    partial class ArtesaniasDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250909232810_updateModelos")]
+    partial class updateModelos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
