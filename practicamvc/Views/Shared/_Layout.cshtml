@@ -48,13 +48,16 @@
                     </li>
                 </ul>
 
-                <!-- Buscador global (opcional) -->
-                <form class="d-none d-lg-flex me-3" method="get" asp-controller="@currentController" asp-action="Index">
+                <!-- Buscador global -->
+                <form class="d-none d-lg-flex me-3" method="get" asp-controller="@currentController" asp-action="Index" role="search">
+                    <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
+                </form>
+                <form class="d-lg-none w-100 mt-2" method="get" asp-controller="@currentController" asp-action="Index" role="search">
                     <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
                 </form>
 
                 <!-- Toggle tema -->
-                <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" title="Cambiar tema">
+                <button id="themeToggle" class="btn btn-outline-light btn-sm ms-lg-2" type="button" title="Cambiar tema">
                     🌙
                 </button>
             </div>
@@ -67,14 +70,14 @@
         {
             <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm" role="alert">
                 @ok
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }
         @if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
         {
             <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm" role="alert">
                 @err
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }
     </div>
@@ -85,7 +88,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-top py-4 mt-auto">
+    <footer class="py-4 mt-auto">
         <div class="container d-flex flex-wrap gap-2 justify-content-between align-items-center text-muted small">
             <span>© @DateTime.Now.Year — Artesanías</span>
             <span>Controlador: <strong>@currentController</strong> · Acción: <strong>@currentAction</strong></span>
@@ -97,21 +100,28 @@
 
     <script>
         // --- Tema claro/oscuro persistente ---
-        const root = document.documentElement;
-        const key = "artesanias-theme";
-        const btn = document.getElementById("themeToggle");
+        (function () {
+            const root = document.documentElement;
+            const key = "artesanias-theme";
+            const btn = document.getElementById("themeToggle");
 
-        function applyTheme(t) {
-            root.setAttribute("data-theme", t);
-            if (btn) btn.textContent = t === "dark" ? "☀️" : "🌙";
-        }
-        const saved = localStorage.getItem(key) || "light";
-        applyTheme(saved);
-        btn?.addEventListener("click", () => {
-            const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
-            localStorage.setItem(key, next);
-            applyTheme(next);
-        });
+            // Primera carga: respeta preferencia del SO si no hay guardado
+            if (!localStorage.getItem(key)) {
+                const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+                localStorage.setItem(key, prefersDark ? 'dark' : 'light');
+            }
+            function applyTheme(t) {
+                root.setAttribute("data-theme", t);
+                if (btn) btn.textContent = t === "dark" ? "☀️" : "🌙";
+            }
+            const saved = localStorage.getItem(key) || "light";
+            applyTheme(saved);
+            btn?.addEventListener("click", () => {
+                const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+                localStorage.setItem(key, next);
+                applyTheme(next);
+            });
+        })();
     </script>
 
     @RenderSection("Scripts", required: false)

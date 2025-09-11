@@ -1,9 +1,17 @@
+/* ===== Paleta base ===== */
 :root {
     --bg: #f6f7fb;
     --card: #ffffff;
     --text: #212529;
     --muted: #6c757d;
     --ring: rgba(13,110,253,.25);
+    --primary: #0d6efd;
+    --primary-contrast: #ffffff;
+    --border: rgba(0,0,0,.08);
+    --hover: rgba(13,110,253,.06);
+    --ok: 25,135,84; /* success */
+    --warn: 255,193,7; /* warning */
+    --err: 220,53,69; /* danger */
 }
 
 html[data-theme="dark"] {
@@ -12,49 +20,188 @@ html[data-theme="dark"] {
     --text: #e9ecef;
     --muted: #a0a6ad;
     --ring: rgba(255,255,255,.15);
+    --primary: #6ea8fe;
+    --primary-contrast: #0b0e12;
+    --border: rgba(255,255,255,.08);
+    --hover: rgba(255,255,255,.06);
+}
+
+/* ===== Global ===== */
+html, body {
+    height: 100%;
 }
 
 body {
     background: var(--bg);
     color: var(--text);
+    display: flex;
+    flex-direction: column;
 }
 
-.card, .table, .alert {
+main.container {
+    flex: 1 0 auto;
+}
+
+footer {
+    background: transparent;
+    color: var(--muted);
+}
+
+/* ===== Cards y tablas ===== */
+.container {
+    max-width: 1080px;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    border: 1px solid var(--border);
+}
+
+    .card .card-body {
+        padding: 1.25rem;
+    }
+
+.table {
     background: var(--card);
     color: var(--text);
 }
+
+    .table td,
+    .table th {
+        color: var(--text) !important;
+    }
 
     .table thead th {
         position: sticky;
         top: 0;
         z-index: 1;
+        background: var(--card);
     }
 
+    .table tbody tr:hover {
+        background: var(--hover);
+    }
+
+/* Ajustes extra para modo oscuro */
+html[data-theme="dark"] .table thead th {
+    background-color: #2a2f36;
+}
+
+html[data-theme="dark"] .table tbody tr:nth-child(odd) {
+    background-color: #22262c;
+}
+
+/* ===== Formularios ===== */
 .form-control, .form-select {
     background: var(--card);
     color: var(--text);
     border-radius: 0.75rem;
+    border: 1px solid var(--border);
 }
 
     .form-control:focus, .form-select:focus {
         box-shadow: 0 0 0 .25rem var(--ring);
+        border-color: transparent;
     }
+
+.form-floating > label {
+    color: var(--muted);
+}
+
+/* ===== Botones ===== */
+.btn {
+    border-radius: .75rem;
+}
 
 .btn-round {
     border-radius: 999px;
 }
 
-.logo-dot {
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.2) inset;
+.btn-outline-secondary {
+    border-color: rgba(108,117,125,.35);
 }
 
-.navbar .nav-link.active {
+.btn-outline-light {
+    border-color: rgba(255,255,255,.35);
+}
+
+/* ===== Badges ===== */
+.badge.rounded-pill {
+    padding: .4rem .75rem;
+    border: 1px solid var(--border);
+}
+
+.bg-success-subtle {
+    background: rgba(var(--ok), .15) !important;
+    color: rgb(var(--ok)) !important;
+}
+
+.bg-warning-subtle {
+    background: rgba(var(--warn), .18) !important;
+    color: rgb(var(--warn)) !important;
+}
+
+.bg-danger-subtle {
+    background: rgba(var(--err), .15) !important;
+    color: rgb(var(--err)) !important;
+}
+
+/* ===== Navbar ===== */
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--primary-contrast) !important;
+}
+
+.navbar-dark .nav-link:hover {
+    opacity: .85;
+}
+
+.navbar-dark .nav-link.active {
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 6px;
+}
+
+/* Buscador en navbar */
+.navbar .form-control.form-control-sm {
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    border-color: rgba(255,255,255,.25);
+}
+
+html[data-theme="dark"] .navbar .form-control.form-control-sm {
+    background: rgba(0,0,0,.25);
+    color: #fff;
+    border-color: rgba(255,255,255,.25);
+}
+
+.navbar .form-control.form-control-sm::placeholder {
+    color: rgba(255,255,255,.75);
+}
+
+/* ===== Alerts ===== */
+.alert {
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+}
+
+/* ===== Footer ===== */
+footer .container {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+}
+
+/* ===== Logo punto ===== */
+.logo-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--primary-contrast);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.2) inset;
 }
