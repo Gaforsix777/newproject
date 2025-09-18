@@ -1,53 +1,48 @@
 ﻿@model IEnumerable<WebApplication1.User>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usuarios";
 }
+<h1>Usuarios</h1>
 
-<h1>Index</h1>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input name="q" class="form-control" placeholder="Buscar por nombre o email"
+               value="@Context.Request.Query["q"]" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        <a class="btn btn-secondary" asp-action="Index">Limpiar</a>
+        <a class="btn btn-primary" asp-action="Create">Crear usuario</a>
+    </div>
+</form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswordHash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rol)
-            </th>
-            <th></th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th style="width:220px">Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rol)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Nombre</td>
+                <td>@u.Email</td>
+                <td>@u.Rol</td>
+                <td>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@u.Id">Detalles</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@u.Id">Editar</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@u.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-info">@TempData["msg"]</div>
+}
