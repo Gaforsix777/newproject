@@ -1,17 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using WebApplication1;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
-// 1) MVC
 builder.Services.AddControllersWithViews();
 
-// 2) EF Core: registrar AppDbContext usando la cadena de conexion
-builder.Services.AddDbContext<WebApplication1.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -20,14 +18,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// (más adelante agregaremos app.UseAuthentication() cuando implementes login)
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Users}/{action=Index}/{id?}"); // opcional: deja Home/Index si prefieres
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
