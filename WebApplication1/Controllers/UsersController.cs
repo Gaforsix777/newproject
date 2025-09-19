@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;  // Asegúrate de tener esto
 
 namespace WebApplication1.Controllers
 {
+    [Authorize(Roles = "admin")] // Este atributo asegura que solo un admin pueda acceder a estas acciones
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
@@ -49,7 +50,7 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            // Email único
+            // Verificar si el email ya está registrado
             var exists = await _context.Users.AnyAsync(u => u.Email == vm.Email);
             if (exists)
             {
@@ -100,7 +101,7 @@ namespace WebApplication1.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();
 
-            // Si cambia email, validar que no esté en uso por otro
+            // Verificar si el email se modificó y ya está en uso
             if (!string.Equals(user.Email, vm.Email, StringComparison.OrdinalIgnoreCase))
             {
                 var exists = await _context.Users.AnyAsync(u => u.Email == vm.Email && u.Id != id);
@@ -115,6 +116,7 @@ namespace WebApplication1.Controllers
             user.Email = vm.Email;
             user.Rol = vm.Rol;
 
+            // Si se introdujo una nueva contraseña, actualizamos el hash
             if (!string.IsNullOrWhiteSpace(vm.NewPassword))
             {
                 user.PasswordHash = _hasher.HashPassword(user, vm.NewPassword);

@@ -36,7 +36,7 @@
                         </li>
                     </ul>
 
-                    <!-- Autenticación derecha (funciona si luego activas Identity) -->
+                    <!-- Autenticación derecha -->
                     <ul class="navbar-nav">
                         @if (User?.Identity?.IsAuthenticated ?? false)
                         {
@@ -45,9 +45,8 @@
                             </li>
                             <li class="nav-item">
                                 <form class="form-inline"
-                                      asp-area="Identity"
-                                      asp-page="/Account/Logout"
-                                      asp-route-returnUrl="@Url.Action("Index","Home")"
+                                      asp-controller="Account"
+                                      asp-action="Logout"
                                       method="post">
                                     <button type="submit" class="nav-link btn btn-link text-dark">Salir</button>
                                 </form>
@@ -56,10 +55,10 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Ingresar</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Ingresar</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Registrarse</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Registrarse</a>
                             </li>
                         }
                     </ul>
