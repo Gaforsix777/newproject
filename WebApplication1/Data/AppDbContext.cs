@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>  // Cambia DbContext por IdentityDbContext<User>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        public DbSet<User> Users => Set<User>();
-        public DbSet<Product> Products => Set<Product>();
 
+        // DbSets para los modelos
+        public DbSet<Product> Products => Set<Product>();
     }
 }

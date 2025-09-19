@@ -3,7 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;  // Asegúrate de tener esto
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;  // Asegúrate de tener esto
 
 namespace WebApplication1.Controllers
 {
