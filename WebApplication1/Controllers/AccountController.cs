@@ -1,72 +1,62 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using WebApplication1;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _db;
-        private readonly PasswordHasher<User> _hasher = new();
+        private readonly AppDbContext _context;
 
-        public AccountController(AppDbContext db) { _db = db; }
-
-        [HttpGet]
-        public IActionResult Login(string? returnUrl = null)
+        public AccountController(AppDbContext context)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View(new LoginVM());
+            _context = context;
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginVM vm, string? returnUrl = null)
+        // Vista de Login (GET)
+        public IActionResult Login()
         {
-            if (!ModelState.IsValid) return View(vm);
+            return View();
+        }
 
-            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == vm.Email);
-            if (user == null)
+        // Login (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null || user.PasswordHash != password) // Simple comparación de contraseñas (sin hashing en este ejemplo)
             {
-                ModelState.AddModelError("", "Credenciales inválidas");
-                return View(vm);
+                ModelState.AddModelError("", "Correo o contraseña incorrectos");
+                return View();
             }
 
-            var res = _hasher.VerifyHashedPassword(user, user.PasswordHash, vm.Password);
-            if (res == PasswordVerificationResult.Failed)
-            {
-                ModelState.AddModelError("", "Credenciales inválidas");
-                return View(vm);
-            }
-
+            // Crear los claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, user.Rol.ToString()) // admin|cliente|empleado
+                new Claim(ClaimTypes.Role, user.Rol.ToString())
             };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-            if (!string.IsNullOrWhiteSpace(returnUrl)) return Redirect(returnUrl);
+            // Crear la identidad y principal
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // Iniciar sesión
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        // Logout
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
-        }
-
-        public IActionResult Denied() => View();
-
-        public class LoginVM
-        {
-            [Required, EmailAddress] public string Email { get; set; } = string.Empty;
-            [Required, DataType(DataType.Password)] public string Password { get; set; } = string.Empty;
         }
     }
 }

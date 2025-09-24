@@ -1,26 +1,5 @@
 ﻿@model IEnumerable<WebApplication1.Product>
-@{
-    ViewData["Title"] = "Productos";
-}
 <h2>Productos</h2>
-<form method="get" class="row g-2 mb-3">
-    <div class="col-auto">
-        <input name="q" class="form-control" placeholder="Buscar" value="@Context.Request.Query["q"]" />
-    </div>
-    <div class="col-auto">
-        <input name="categoria" class="form-control" placeholder="Categoría" value="@Context.Request.Query["categoria"]" />
-    </div>
-    <div class="col-auto">
-        <input name="min" class="form-control" placeholder="Precio Mínimo" value="@Context.Request.Query["min"]" />
-    </div>
-    <div class="col-auto">
-        <input name="max" class="form-control" placeholder="Precio Máximo" value="@Context.Request.Query["max"]" />
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-outline-primary">Buscar</button>
-    </div>
-</form>
-
 <table class="table">
     <thead>
         <tr>
@@ -34,18 +13,17 @@
     <tbody>
         @foreach (var product in Model)
         {
-                <tr>
-                    <td>@product.Nombre</td>
-                    <td>@product.Precio</td>
-                    <td>@product.Stock</td>
-                    <td>@product.Categoria</td>
-                    <td>
-                        <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@product.Id">Editar</a>
-                        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@product.Id">Eliminar</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>@product.Nombre</td>
+                <td>@product.Precio</td>
+                <td>@product.Stock</td>
+                <td>@product.Categoria</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Products", new { id = product.Id })" class="btn btn-warning">Editar</a>
+                    <a href="@Url.Action("Delete", "Products", new { id = product.Id })" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
-
-<a class="btn btn-primary" asp-action="Create">Nuevo Producto</a>
+<a href="@Url.Action("Create", "Products")" class="btn btn-primary">Nuevo Producto</a>

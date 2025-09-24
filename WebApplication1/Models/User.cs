@@ -14,7 +14,7 @@ namespace WebApplication1
         [Required, EmailAddress, StringLength(200)]
         public string Email { get; set; } = string.Empty;
 
-        // guardamos hash, no texto plano
+        // Guardamos el hash de la contraseña
         [Required, StringLength(500)]
         public string PasswordHash { get; set; } = string.Empty;
 

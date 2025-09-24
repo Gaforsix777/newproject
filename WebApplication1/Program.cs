@@ -1,36 +1,35 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1;  // Usa tu namespace
+using WebApplication1;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar servicios de Identity y DBContext para que funcione correctamente
+// Configuración de la base de datos con Entity Framework Core
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuración de Identity
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()  // Este método se usa para asociar Identity con tu DbContext
-    .AddDefaultTokenProviders();  // Para generar tokens como en el reset de contraseñas
+// Configuración de autenticación con cookies
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Ruta de login
+        options.LogoutPath = "/Account/Logout"; // Ruta de logout
+        options.AccessDeniedPath = "/Home/AccessDenied"; // Ruta de acceso denegado
+    });
 
-builder.Services.AddControllersWithViews(); // Si estás usando MVC
+// Agregar servicios de MVC
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
+// Configuración del middleware
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseAuthentication();  // Habilitar autenticación
-app.UseAuthorization();   // Habilitar autorización
+app.UseAuthentication(); // Habilitar la autenticación
+app.UseAuthorization();  // Habilitar autorización
 
+// Configuración de las rutas de los controladores
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
