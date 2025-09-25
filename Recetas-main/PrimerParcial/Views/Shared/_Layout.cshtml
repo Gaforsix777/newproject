@@ -1,0 +1,96 @@
+﻿@{
+    string controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PrimerParcial</title>
+
+    <!-- Bootstrap + estilos del proyecto -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PrimerParcial.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">
+                    PrimerParcial
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link @(controller=="Home" && action=="Index" ? "active" : "")"
+                               asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(controller=="Categories" ? "active" : "")"
+                               asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(controller=="Recipes" ? "active" : "")"
+                               asp-controller="Recipes" asp-action="Index">Recipes</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(controller=="Ingredients" ? "active" : "")"
+                               asp-controller="Ingredients" asp-action="Index">Ingredients</a>
+                        </li>
+                    </ul>
+
+                    <!-- lugar para buscador o usuario -->
+                    <div class="d-flex">
+                        <a class="btn btn-outline-light btn-sm"
+                           asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container py-4">
+        <!-- Mensajes TempData opcionales -->
+        @if (TempData["Success"] is string ok && !string.IsNullOrWhiteSpace(ok))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @ok
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @err
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top py-3 bg-white">
+        <div class="container text-muted small d-flex justify-content-between">
+            <span>&copy; @DateTime.Now.Year - PrimerParcial</span>
+            <a class="link-secondary" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
