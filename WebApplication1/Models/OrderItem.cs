@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
@@ -6,18 +7,17 @@ namespace WebApplication1
     {
         public int Id { get; set; }
 
-        [Required]
-        public int OrderId { get; set; }  // Relacionado con Order
-        public Order Order { get; set; }  // Relación con Order
+        [Required] public int OrderId { get; set; }
+        public Order? Order { get; set; }
 
-        [Required]
-        public int ProductId { get; set; }  // Relacionado con Product
-        public Product Product { get; set; }  // Relación con Product
+        [Required] public int ProductId { get; set; }
+        public Product? Product { get; set; }
 
         [Required, Range(1, 1000000)]
-        public int Cantidad { get; set; }  // Cantidad del producto en el pedido
+        public int Cantidad { get; set; }
 
-        [Range(0.01, 9999999)]
-        public decimal Subtotal { get; set; }  // Calculado como Precio * Cantidad
+        [Precision(18, 2)]
+        [Range(0.01, 99999999)]
+        public decimal Subtotal { get; set; }
     }
 }

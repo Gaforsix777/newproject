@@ -1,0 +1,34 @@
+﻿@model IEnumerable<WebApplication1.Order>
+@{
+    ViewData["Title"] = "Pedidos";
+}
+<h2>Pedidos</h2>
+<p><a class="btn btn-primary" asp-action="Create">Nuevo pedido</a></p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No hay pedidos.</div>
+}
+else
+{
+    <table class="table table-sm align-middle">
+        <thead>
+            <tr><th>#</th><th>Cliente</th><th>Fecha</th><th>Estado</th><th class="text-end">Total</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@o.Cliente?.Nombre</td>
+                    <td>@o.Fecha.ToLocalTime():g</td>
+                    <td>@o.Estado</td>
+                    <td class="text-end">@o.Total.ToString("N2")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@o.Id">Ver</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

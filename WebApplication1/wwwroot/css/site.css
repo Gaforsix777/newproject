@@ -1,22 +1,41 @@
-html {
-  font-size: 14px;
+/* Espaciado global */
+main {
+    padding-top: 1rem;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Tablas */
+.table th {
+    white-space: nowrap;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.table td, .table th {
+    vertical-align: middle;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* Badge de stock (ejemplo en productos) */
+.badge-stock-ok {
+    background: #27ae60;
 }
 
-body {
-  margin-bottom: 60px;
+.badge-stock-low {
+    background: #f39c12;
+}
+
+.badge-stock-out {
+    background: #e74c3c;
+}
+
+/* Cards suaves */
+.card {
+    border-radius: 0.75rem;
+}
+
+/* Form inputs un poco más grandes */
+.form-control, .form-select {
+    padding: .55rem .75rem;
+}
+
+/* Links del navbar un poco más marcados */
+.navbar .nav-link {
+    font-weight: 500;
 }

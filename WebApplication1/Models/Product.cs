@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
@@ -12,7 +13,8 @@ namespace WebApplication1
         [StringLength(500)]
         public string? Descripcion { get; set; }
 
-        [Required, Range(0.01, 9999999)]
+        [Precision(18, 2)]
+        [Required, Range(0.01, 99999999)]
         public decimal Precio { get; set; }
 
         [Required, Range(0, int.MaxValue)]

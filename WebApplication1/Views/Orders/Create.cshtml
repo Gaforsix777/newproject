@@ -1,0 +1,48 @@
+﻿@model WebApplication1.OrderCreateVM
+@{
+    ViewData["Title"] = "Nuevo pedido";
+    var clientes = (IEnumerable<WebApplication1.User>)ViewBag.Clientes;
+    var productos = (IEnumerable<WebApplication1.Product>)ViewBag.Productos;
+}
+<h2>Nuevo pedido</h2>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3" style="max-width:420px">
+        <label class="form-label">Cliente</label>
+        <select asp-for="ClienteId" class="form-select"
+                asp-items="new SelectList(clientes, nameof(WebApplication1.User.Id), nameof(WebApplication1.User.Nombre))">
+            <option value="">-- Selecciona cliente --</option>
+        </select>
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
+    </div>
+
+    <h5>Productos</h5>
+    <table class="table table-sm align-middle" style="max-width:900px">
+        <thead><tr><th style="width:60%">Producto</th><th style="width:20%">Cantidad</th></tr></thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select asp-for="Items[i].ProductId" class="form-select"
+                                asp-items="new SelectList(productos, nameof(WebApplication1.Product.Id), nameof(WebApplication1.Product.Nombre))">
+                            <option value="">-- Selecciona --</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input asp-for="Items[i].Cantidad" class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-primary" type="submit">Crear pedido</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+ }

@@ -1,29 +1,52 @@
 ﻿@model IEnumerable<WebApplication1.Product>
+@{
+    ViewData["Title"] = "Productos";
+    bool isStaff = (bool)(ViewBag.IsStaff ?? false);
+}
 <h2>Productos</h2>
-<table class="table">
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto"><input name="q" class="form-control" placeholder="Buscar" value="@Context.Request.Query["q"]" /></div>
+    <div class="col-auto"><input name="categoria" class="form-control" placeholder="Categoría" value="@Context.Request.Query["categoria"]" /></div>
+    <div class="col-auto"><input name="min" class="form-control" placeholder="Precio mín" value="@Context.Request.Query["min"]" /></div>
+    <div class="col-auto"><input name="max" class="form-control" placeholder="Precio máx" value="@Context.Request.Query["max"]" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary" type="submit">Buscar</button></div>
+</form>
+
+@if (isStaff)
+{
+    <p><a class="btn btn-primary" asp-action="Create">Nuevo Producto</a></p>
+}
+
+<table class="table table-sm align-middle">
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
             <th>Categoría</th>
-            <th>Acciones</th>
+            <th class="text-end">Precio</th>
+            <th class="text-end">Stock</th>
+            @if (isStaff)
+            {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model)
+        @foreach (var p in Model)
         {
             <tr>
-                <td>@product.Nombre</td>
-                <td>@product.Precio</td>
-                <td>@product.Stock</td>
-                <td>@product.Categoria</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Products", new { id = product.Id })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("Delete", "Products", new { id = product.Id })" class="btn btn-danger">Eliminar</a>
-                </td>
+                <td>@p.Nombre</td>
+                <td>@p.Categoria</td>
+                <td class="text-end">@p.Precio.ToString("N2")</td>
+                <td class="text-end">@p.Stock</td>
+                @if (isStaff)
+                {
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@p.Id">Editar</a>
+                        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@p.Id">Eliminar</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>
 </table>
-<a href="@Url.Action("Create", "Products")" class="btn btn-primary">Nuevo Producto</a>

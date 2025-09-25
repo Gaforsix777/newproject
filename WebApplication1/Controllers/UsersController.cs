@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;          // [Authorize]
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;  // Asegúrate de tener esto
+using Microsoft.EntityFrameworkCore;               // EF Core
+using WebApplication1;                             // Modelos (User, UserRole)
+using WebApplication1.Services;                    // PasswordHelper
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "admin")] // Este atributo asegura que solo un admin pueda acceder a estas acciones
+    [Authorize(Roles = "admin")] // Solo admin puede gestionar usuarios
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly PasswordHasher<User> _hasher = new();
 
         public UsersController(AppDbContext context)
         {
@@ -51,11 +51,11 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            // Verificar si el email ya está registrado
+            // Email único
             var exists = await _context.Users.AnyAsync(u => u.Email == vm.Email);
             if (exists)
             {
-                ModelState.AddModelError("Email", "Ya existe un usuario con este correo.");
+                ModelState.AddModelError(nameof(vm.Email), "Ya existe un usuario con este correo.");
                 return View(vm);
             }
 
@@ -63,11 +63,11 @@ namespace WebApplication1.Controllers
             {
                 Nombre = vm.Nombre,
                 Email = vm.Email,
-                Rol = vm.Rol
+                Rol = vm.Rol,
+                PasswordHash = PasswordHelper.Hash(vm.Password) // hash PBKDF2 salt$hash
             };
-            user.PasswordHash = _hasher.HashPassword(user, vm.Password);
 
-            _context.Add(user);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
             TempData["msg"] = "Usuario creado.";
             return RedirectToAction(nameof(Index));
@@ -102,13 +102,13 @@ namespace WebApplication1.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();
 
-            // Verificar si el email se modificó y ya está en uso
+            // Si cambia email, validar que no esté en uso por otro
             if (!string.Equals(user.Email, vm.Email, StringComparison.OrdinalIgnoreCase))
             {
                 var exists = await _context.Users.AnyAsync(u => u.Email == vm.Email && u.Id != id);
                 if (exists)
                 {
-                    ModelState.AddModelError("Email", "Ya existe un usuario con este correo.");
+                    ModelState.AddModelError(nameof(vm.Email), "Ya existe un usuario con este correo.");
                     return View(vm);
                 }
             }
@@ -120,7 +120,7 @@ namespace WebApplication1.Controllers
             // Si se introdujo una nueva contraseña, actualizamos el hash
             if (!string.IsNullOrWhiteSpace(vm.NewPassword))
             {
-                user.PasswordHash = _hasher.HashPassword(user, vm.NewPassword);
+                user.PasswordHash = PasswordHelper.Hash(vm.NewPassword);
             }
 
             try
@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(vm.Id)) return NotFound();
+                if (!_context.Users.Any(e => e.Id == vm.Id)) return NotFound();
                 throw;
             }
         }
@@ -162,7 +162,5 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-        private bool UserExists(int id) => _context.Users.Any(e => e.Id == id);
     }
 }

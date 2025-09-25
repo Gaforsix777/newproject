@@ -1,62 +1,116 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
-        public AccountController(AppDbContext context)
-        {
-            _context = context;
-        }
+        public AccountController(AppDbContext db) { _db = db; }
 
-        // Vista de Login (GET)
-        public IActionResult Login()
-        {
-            return View();
-        }
+        // ---------- REGISTER ----------
+        [HttpGet]
+        public IActionResult Register() => View(new RegisterVM());
 
-        // Login (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Register(RegisterVM vm)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (!ModelState.IsValid) return View(vm);
 
-            if (user == null || user.PasswordHash != password) // Simple comparación de contraseñas (sin hashing en este ejemplo)
+            var exists = await _db.Users.AnyAsync(u => u.Email == vm.Email);
+            if (exists)
             {
-                ModelState.AddModelError("", "Correo o contraseña incorrectos");
-                return View();
+                ModelState.AddModelError(nameof(vm.Email), "Ya existe un usuario con este email.");
+                return View(vm);
             }
 
-            // Crear los claims
-            var claims = new List<Claim>
+            var user = new User
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, user.Rol.ToString())
+                Nombre = vm.Nombre,
+                Email = vm.Email,
+                Rol = vm.Rol,
+                PasswordHash = PasswordHelper.Hash(vm.Password) // guardamos hash "salt$hash"
             };
 
-            // Crear la identidad y principal
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+            _db.Users.Add(user);
+            await _db.SaveChangesAsync();
 
-            // Iniciar sesión
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            // (Opcional) loguear automáticamente después de registrar:
+            await SignInAsync(user);
 
             return RedirectToAction("Index", "Home");
         }
 
-        // Logout
+        // ---------- LOGIN ----------
+        [HttpGet]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View(new LoginVM());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginVM vm, string? returnUrl = null)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == vm.Email);
+            if (user == null || !PasswordHelper.Verify(user.PasswordHash, vm.Password))
+            {
+                ModelState.AddModelError("", "Credenciales inválidas");
+                return View(vm);
+            }
+
+            await SignInAsync(user);
+
+            return !string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl)
+                ? Redirect(returnUrl)
+                : RedirectToAction("Index", "Home");
+        }
+
+        // ---------- LOGOUT ----------
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task SignInAsync(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Rol.ToString())
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
+
+        // ---------- ViewModels ----------
+        public class RegisterVM
+        {
+            [Required, StringLength(100)] public string Nombre { get; set; } = string.Empty;
+            [Required, EmailAddress, StringLength(200)] public string Email { get; set; } = string.Empty;
+            [Required, StringLength(100, MinimumLength = 6), DataType(DataType.Password)] public string Password { get; set; } = string.Empty;
+            [Required] public UserRole Rol { get; set; } = UserRole.cliente;
+        }
+
+        public class LoginVM
+        {
+            [Required, EmailAddress] public string Email { get; set; } = string.Empty;
+            [Required, DataType(DataType.Password)] public string Password { get; set; } = string.Empty;
         }
     }
 }

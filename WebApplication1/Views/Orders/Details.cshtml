@@ -1,0 +1,39 @@
+﻿@model WebApplication1.Order
+@{
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+}
+
+<h2>Pedido #@Model.Id</h2>
+<p><strong>Cliente:</strong> @Model.Cliente?.Nombre</p>
+<p><strong>Fecha:</strong> @Model.Fecha.ToLocalTime():g</p>
+
+<form asp-action="ChangeStatus" method="post" class="mb-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div class="input-group" style="max-width:360px">
+        <select class="form-select" name="estado" asp-for="Estado" asp-items="Html.GetEnumSelectList<WebApplication1.OrderStatus>()"></select>
+        <button class="btn btn-outline-primary" type="submit">Cambiar estado</button>
+    </div>
+</form>
+
+<table class="table table-sm">
+    <thead><tr><th>Producto</th><th class="text-end">Cantidad</th><th class="text-end">Subtotal</th></tr></thead>
+    <tbody>
+        @foreach (var it in Model.Items)
+        {
+            <tr>
+                <td>@it.Product?.Nombre</td>
+                <td class="text-end">@it.Cantidad</td>
+                <td class="text-end">@it.Subtotal.ToString("N2")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2" class="text-end">Total</th>
+            <th class="text-end">@Model.Total.ToString("N2")</th>
+        </tr>
+    </tfoot>
+</table>
+
+<p><a class="btn btn-secondary" asp-action="Index">Volver</a></p>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
@@ -6,20 +7,18 @@ namespace WebApplication1
     {
         public int Id { get; set; }
 
-        [Required]
-        public int ClienteId { get; set; }  // Relacionado con la tabla Users
-        public User Cliente { get; set; }  // Relación con User
+        [Required] public int ClienteId { get; set; }
+        public User? Cliente { get; set; }
 
-        [Required]
-        public DateTime Fecha { get; set; } = DateTime.UtcNow;
+        [Required] public DateTime Fecha { get; set; } = DateTime.UtcNow;
 
-        [Required]
-        public OrderStatus Estado { get; set; } = OrderStatus.Pendiente;
+        [Required] public OrderStatus Estado { get; set; } = OrderStatus.Pendiente;
 
-        [Range(0.01, 9999999)]
-        public decimal Total { get; set; }  // Total calculado del pedido
+        [Precision(18, 2)]
+        [Range(0, 99999999)]
+        public decimal Total { get; set; }
 
-        public List<OrderItem> Items { get; set; } = new();  // Relación con OrderItem
+        public List<OrderItem> Items { get; set; } = new();
     }
 
     public enum OrderStatus { Pendiente, Procesado, Enviado, Entregado }

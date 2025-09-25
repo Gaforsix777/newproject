@@ -1,37 +1,39 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de la base de datos con Entity Framework Core
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuración de autenticación con cookies
-builder.Services.AddAuthentication("Cookies")
-    .AddCookie(options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o =>
     {
-        options.LoginPath = "/Account/Login"; // Ruta de login
-        options.LogoutPath = "/Account/Logout"; // Ruta de logout
-        options.AccessDeniedPath = "/Home/AccessDenied"; // Ruta de acceso denegado
+        o.LoginPath = "/Account/Login";
+        o.LogoutPath = "/Account/Logout";
+        o.AccessDeniedPath = "/Home/AccessDenied";
     });
-
-// Agregar servicios de MVC
-builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configuración del middleware
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseAuthentication(); // Habilitar la autenticación
-app.UseAuthorization();  // Habilitar autorización
+app.UseAuthentication();
+app.UseAuthorization();
 
-// Configuración de las rutas de los controladores
-app.MapControllerRoute(
-    name: "default",
+app.MapControllerRoute(name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
