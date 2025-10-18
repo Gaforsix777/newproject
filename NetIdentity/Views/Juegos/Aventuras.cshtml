@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Aventuras";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Juegos</a></li>
+                    <li class="breadcrumb-item active">Aventuras</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white">
+                    <h2>🚀 Aventura Espacial</h2>
+                </div>
+                <div class="card-body bg-dark text-white" style="min-height: 400px;">
+                    <div class="text-center py-5">
+                        <h3>🌍 → 🚀 → 🌙</h3>
+                        <p class="lead mt-4">
+                            Estás a punto de despegar en tu cohete espacial hacia la Luna.
+                            <br>Tu misión: recolectar muestras de rocas lunares para la ciencia.
+                        </p>
+                        <div class="mt-5">
+                            <button class="btn btn-warning btn-lg me-2">🚀 Despegar</button>
+                            <button class="btn btn-info btn-lg">📡 Comunicación</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <a asp-action="Index" class="btn btn-secondary">← Volver</a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-primary">Nivel: Principiante</span>
+                            <span class="badge bg-warning">Energía: 100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

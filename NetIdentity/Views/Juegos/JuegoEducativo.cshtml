@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Juego Educativo";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Juegos</a></li>
+                    <li class="breadcrumb-item active">Juego Educativo</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">🧠 Juego de Matemáticas</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h4>¡Resuelve el problema!</h4>
+                        <p class="mb-0">Si tienes 5 manzanas y compras 3 más, ¿cuántas manzanas tienes?</p>
+                    </div>
+
+                    <div class="btn-group-vertical d-grid gap-2 mt-4">
+                        <button class="btn btn-outline-primary btn-lg">A) 7 manzanas</button>
+                        <button class="btn btn-outline-primary btn-lg">B) 8 manzanas</button>
+                        <button class="btn btn-outline-primary btn-lg">C) 9 manzanas</button>
+                        <button class="btn btn-outline-primary btn-lg">D) 6 manzanas</button>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-muted"><small>Puntuación: 0 | Nivel: 1</small></p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-secondary">← Volver a Juegos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

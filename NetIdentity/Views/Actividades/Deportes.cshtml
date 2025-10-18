@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Tareas Escolares";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Actividades</a></li>
+            <li class="breadcrumb-item active">Tareas</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <h1>📝 Organizador de Tareas</h1>
+            <p class="lead">Mantén tus tareas escolares organizadas</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4>Mis Tareas Pendientes</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">📐 Matemáticas</h5>
+                                <small class="text-danger">Vence: Mañana</small>
+                            </div>
+                            <p class="mb-1">Resolver ejercicios del 1 al 20, página 45</p>
+                            <button class="btn btn-sm btn-success">Marcar como completada</button>
+                        </div>
+
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">📖 Lengua</h5>
+                                <small class="text-warning">Vence: Viernes</small>
+                            </div>
+                            <p class="mb-1">Leer capítulos 3 y 4 del libro</p>
+                            <button class="btn btn-sm btn-success">Marcar como completada</button>
+                        </div>
+
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">🔬 Ciencias</h5>
+                                <small class="text-info">Vence: Próxima semana</small>
+                            </div>
+                            <p class="mb-1">Experimento: ciclo del agua</p>
+                            <button class="btn btn-sm btn-success">Marcar como completada</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5>📊 Progreso Semanal</h5>
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar bg-success" style="width: 60%">60%</div>
+                    </div>
+                    <p><strong>Tareas completadas:</strong> 6 de 10</p>
+                    <hr>
+                    <h5>🎯 Próxima Meta</h5>
+                    <p>Completar todas las tareas antes del viernes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">← Volver a Actividades</a>
+    </div>
+</div>

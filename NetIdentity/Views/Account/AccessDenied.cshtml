@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Acceso Denegado";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <div class="card border-danger">
+            <div class="card-body">
+                <i class="bi bi-x-circle text-danger" style="font-size: 4rem;"></i>
+                <h1 class="display-4 text-danger mt-3">Acceso Denegado</h1>
+                <p class="lead">No tienes permisos para acceder a esta sección.</p>
+                <hr>
+                <p class="mb-4">
+                    Esta área está restringida solo para usuarios <strong>menores de 18 años</strong>.
+                </p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</div>

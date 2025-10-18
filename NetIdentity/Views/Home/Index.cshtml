@@ -1,0 +1,75 @@
+﻿@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+ *@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenido a ProyectoMVC</h1>
+    <p class="lead">Plataforma educativa para menores de edad</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h2>🎮</h2>
+                <h3>Juegos</h3>
+                <p>Juegos educativos y aventuras diseñadas para aprender mientras te diviertes.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Juegos" asp-action="Index" class="btn btn-primary">Ir a Juegos</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Inicia sesión</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h2>📚</h2>
+                <h3>Actividades</h3>
+                <p>Deportes, tareas escolares y actividades para desarrollar tus habilidades.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Actividades" asp-action="Index" class="btn btn-success">Ir a Actividades</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-success">Inicia sesión</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h2>🔒</h2>
+                <h3>Seguro y Protegido</h3>
+                <p>Contenido apropiado para menores de 18 años con control de acceso por edad.</p>
+                <a asp-controller="Home" asp-action="Privacy" class="btn btn-info">Privacidad</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="alert alert-info mt-5 text-center">
+        <h4>¿Listo para comenzar?</h4>
+        <p>Crea tu cuenta para acceder a todo el contenido</p>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">Registrarse Ahora</a>
+    </div>
+}

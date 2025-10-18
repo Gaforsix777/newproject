@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Actividades";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4">📚 Centro de Actividades</h1>
+            <p class="lead">Explora actividades divertidas y educativas</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-primary shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4>⚽ Deportes</h4>
+                </div>
+                <div class="card-body">
+                    <p>Descubre actividades deportivas y mantente activo</p>
+                    <ul class="list-unstyled">
+                        <li>🏃 Rutinas de ejercicio</li>
+                        <li>⚽ Técnicas de fútbol</li>
+                        <li>🏀 Básquetbol para principiantes</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Deportes" class="btn btn-primary w-100">Ver Deportes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-success shadow">
+                <div class="card-header bg-success text-white">
+                    <h4>📝 Tareas</h4>
+                </div>
+                <div class="card-body">
+                    <p>Organiza tus tareas escolares de manera efectiva</p>
+                    <ul class="list-unstyled">
+                        <li>✍️ Planificador semanal</li>
+                        <li>📊 Seguimiento de notas</li>
+                        <li>🎯 Metas académicas</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Tareas" class="btn btn-success w-100">Gestionar Tareas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-info shadow">
+                <div class="card-header bg-info text-white">
+                    <h4>🎨 Arte y Creatividad</h4>
+                </div>
+                <div class="card-body">
+                    <p>Desarrolla tu lado artístico</p>
+                    <ul class="list-unstyled">
+                        <li>🖌️ Tutoriales de dibujo</li>
+                        <li>🎭 Teatro y expresión</li>
+                        <li>🎵 Música básica</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-info w-100">Próximamente</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
