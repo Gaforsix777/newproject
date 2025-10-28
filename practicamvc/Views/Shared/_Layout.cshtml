@@ -56,8 +56,64 @@
                     <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
                 </form>
 
+                <!-- ⭐ NUEVO: Menú de Usuario (Login/Logout) -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(currentController=="User" ? "active" : "")"
+                               href="#"
+                               id="userDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                👤 @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <span class="dropdown-item-text text-muted small">
+                                        @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            ⚙️ Panel Admin
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                }
+                                <li>
+                                    <a class="dropdown-item" asp-controller="User" asp-action="Logout">
+                                        🚪 Cerrar Sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController=="User" && currentAction=="Login" ? "active" : "")"
+                               asp-controller="User"
+                               asp-action="Login">
+                                🔑 Ingresar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController=="User" && currentAction=="Register" ? "active" : "")"
+                               asp-controller="User"
+                               asp-action="Register">
+                                📝 Registrarse
+                            </a>
+                        </li>
+                    }
+                </ul>
+
                 <!-- Toggle tema -->
-                <button id="themeToggle" class="btn btn-outline-light btn-sm ms-lg-2" type="button" title="Cambiar tema">
+                <button id="themeToggle" class="btn btn-outline-light btn-sm ms-2" type="button" title="Cambiar tema">
                     🌙
                 </button>
             </div>
@@ -69,14 +125,14 @@
         @if (TempData["Success"] is string ok && !string.IsNullOrWhiteSpace(ok))
         {
             <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm" role="alert">
-                @ok
+                ✅ @ok
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }
         @if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
         {
             <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm" role="alert">
-                @err
+                ❌ @err
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         }

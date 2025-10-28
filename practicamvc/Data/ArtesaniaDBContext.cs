@@ -12,11 +12,24 @@ namespace practicamvc.Data
         public DbSet<PedidoModel> Pedidos { get; set; }
         public DbSet<DetallePedidoModel> DetallePedidos { get; set; }
 
+        // ⭐ NUEVO: Agrega esta línea
+        public DbSet<UserModel> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // ⭐ NUEVO: Agrega estas configuraciones para Users
+            modelBuilder.Entity<UserModel>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
+
+            modelBuilder.Entity<UserModel>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Tus configuraciones existentes
             modelBuilder.Entity<ProductoModel>()
                 .Property(p => p.Precio)
                 .HasColumnType("decimal(10,2)");
@@ -48,5 +61,4 @@ namespace practicamvc.Data
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
 }
