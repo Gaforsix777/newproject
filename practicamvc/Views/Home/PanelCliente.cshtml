@@ -9,6 +9,7 @@
         <div class="card-body">
             <p>Hola, <strong>@User.Identity?.Name</strong></p>
             <p>Bienvenido al panel de cliente. Aquí puedes gestionar tus pedidos.</p>
+            <a asp-controller="PedidoModels" asp-action="Index" class="btn btn-primary btn-round">Ver mis pedidos</a>
         </div>
     </div>
 </div>

@@ -59,21 +59,27 @@
                                         @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                                     </span>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
 
+                                @* Opciones visibles solo a Cliente *@
                                 @if (User.IsInRole(practicamvc.Models.UserModel.RolCliente))
                                 {
                                     <li><a class="dropdown-item" asp-controller="Home" asp-action="PanelCliente">📊 Panel Cliente</a></li>
+                                    <li><a class="dropdown-item" asp-controller="PedidoModels" asp-action="Index">🧾 Mis Pedidos</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">📈 Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="MiPerfil">👥 Mi Perfil</a></li>
                                 }
+
+                                @* Opciones visibles solo a Proveedor *@
                                 @if (User.IsInRole(practicamvc.Models.UserModel.RolProveedor))
                                 {
                                     <li><a class="dropdown-item" asp-controller="Home" asp-action="PanelProveedor">📊 Panel Proveedor</a></li>
                                     <li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">📦 Mis Productos</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">📈 Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="MiPerfil">👥 Mi Perfil</a></li>
                                 }
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">📈 Dashboard</a></li>
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="MiPerfil">👥 Mi Perfil</a></li>
 
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" asp-controller="User" asp-action="Logout">🚪 Cerrar Sesión</a></li>
                             </ul>
                         </li>

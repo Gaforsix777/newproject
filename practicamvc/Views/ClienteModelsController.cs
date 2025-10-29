@@ -12,8 +12,6 @@ namespace practicamvc.Controllers
         private readonly ArtesaniasDBContext _context;
         public ClienteModelsController(ArtesaniasDBContext context) => _context = context;
 
-        // GET: ClienteModels
-        // /ClienteModels?buscar=camila
         public async Task<IActionResult> Index(string? buscar)
         {
             ViewData["FiltroActual"] = buscar;
@@ -23,35 +21,28 @@ namespace practicamvc.Controllers
             return View(await q.OrderBy(c => c.Nombre).ToListAsync());
         }
 
-        // GET: ClienteModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-
             var cliente = await _context.Clientes
                 .Include(c => c.Pedidos)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null) return NotFound();
-
             return View(cliente);
         }
 
-        // GET: ClienteModels/Create
         public IActionResult Create() => View();
 
-        // POST: ClienteModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Email,Direccion")] ClienteModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
             _context.Add(model);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ClienteModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -60,14 +51,12 @@ namespace practicamvc.Controllers
             return View(model);
         }
 
-        // POST: ClienteModels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Email,Direccion")] ClienteModel model)
         {
             if (id != model.Id) return NotFound();
             if (!ModelState.IsValid) return View(model);
-
             try
             {
                 _context.Update(model);
@@ -81,7 +70,6 @@ namespace practicamvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ClienteModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -90,7 +78,6 @@ namespace practicamvc.Controllers
             return View(model);
         }
 
-        // POST: ClienteModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -12,8 +12,6 @@ namespace practicamvc.Controllers
         private readonly ArtesaniasDBContext _context;
         public ProductoModelsController(ArtesaniasDBContext context) => _context = context;
 
-        // GET: ProductoModels
-        // /ProductoModels?buscar=jarra&orden=precio_desc
         public async Task<IActionResult> Index(string? buscar, string? orden)
         {
             ViewData["OrdenNombre"] = string.IsNullOrEmpty(orden) ? "nombre_desc" : "";
@@ -36,33 +34,26 @@ namespace practicamvc.Controllers
             return View(await q.ToListAsync());
         }
 
-        // GET: ProductoModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-
             var model = await _context.Productos.FirstOrDefaultAsync(m => m.Id == id);
             if (model == null) return NotFound();
-
             return View(model);
         }
 
-        // GET: ProductoModels/Create
         public IActionResult Create() => View();
 
-        // POST: ProductoModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,Precio,Stock")] ProductoModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
             _context.Add(model);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ProductoModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -71,14 +62,12 @@ namespace practicamvc.Controllers
             return View(model);
         }
 
-        // POST: ProductoModels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,Stock")] ProductoModel model)
         {
             if (id != model.Id) return NotFound();
             if (!ModelState.IsValid) return View(model);
-
             try
             {
                 _context.Update(model);
@@ -92,7 +81,6 @@ namespace practicamvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ProductoModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -101,7 +89,6 @@ namespace practicamvc.Controllers
             return View(model);
         }
 
-        // POST: ProductoModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
