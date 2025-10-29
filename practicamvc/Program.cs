@@ -1,52 +1,47 @@
 using System.Globalization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
+using practicamvc.Data;
+using practicamvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Database
-builder.Services.AddDbContext<practicamvc.Data.ArtesaniasDBContext>(options =>
+builder.Services.AddDbContext<ArtesaniasDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ? NUEVO: Cookie Authentication
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+    .AddCookie(o =>
     {
-        options.LoginPath = "/User/Login";
-        options.LogoutPath = "/User/Logout";
-        options.AccessDeniedPath = "/User/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromDays(7);
-        options.SlidingExpiration = true;
-        options.Cookie.Name = "artesanias.auth";
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        o.LoginPath = "/User/Login";
+        o.LogoutPath = "/User/Logout";
+        o.AccessDeniedPath = "/User/AccessDenied";
+        o.Cookie.Name = "artesanias.auth";
+        o.SlidingExpiration = true;
+        o.ExpireTimeSpan = TimeSpan.FromDays(7);
+        o.Cookie.HttpOnly = true;
+        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
 
-// ? NUEVO: Authorization policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy =>
-        policy.RequireClaim(ClaimTypes.Role, "Admin"));
-    options.AddPolicy("UserOnly", policy =>
-        policy.RequireClaim(ClaimTypes.Role, "User", "Admin"));
+    options.AddPolicy("SoloClientes", p => p.RequireRole(UserModel.RolCliente));
+    options.AddPolicy("SoloProveedores", p => p.RequireRole(UserModel.RolProveedor));
+    options.AddPolicy("ClientesYProveedores", p => p.RequireRole(UserModel.RolCliente, UserModel.RolProveedor));
 });
 
 var app = builder.Build();
 
-// --- Cultura: coma decimal (ej. 05,50 -> 5,50) ---
 var culture = new CultureInfo("es-BO");
 culture.NumberFormat.NumberDecimalSeparator = ",";
 culture.NumberFormat.NumberGroupSeparator = ".";
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
-// -------------------------------------------------
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -58,12 +53,55 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// ? NUEVO: Authentication y Authorization (en este orden)
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// ===== SEED =====
+static (string Hash, string Salt) HashPassword(string password)
+{
+    byte[] salt = System.Security.Cryptography.RandomNumberGenerator.GetBytes(128 / 8);
+    string saltB64 = Convert.ToBase64String(salt);
+    string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+        password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
+    return (hash, saltB64);
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ArtesaniasDBContext>();
+    await db.Database.MigrateAsync();
+
+    if (!await db.Users.AnyAsync())
+    {
+        var (hc, sc) = HashPassword("Cliente123!");
+        var (hp, sp) = HashPassword("Proveedor123!");
+
+        db.Users.AddRange(
+            new UserModel
+            {
+                UserName = "cliente_demo",
+                Email = "cliente@demo.com",
+                PasswordHash = hc,
+                Salt = sc,
+                Role = UserModel.RolCliente,
+                IsActive = true
+            },
+            new UserModel
+            {
+                UserName = "proveedor_demo",
+                Email = "proveedor@demo.com",
+                PasswordHash = hp,
+                Salt = sp,
+                Role = UserModel.RolProveedor,
+                IsActive = true
+            }
+        );
+        await db.SaveChangesAsync();
+    }
+}
 
 app.Run();

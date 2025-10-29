@@ -1,4 +1,3 @@
-/* ===== Paleta base ===== */
 :root {
     --bg: #f6f7fb;
     --card: #ffffff;
@@ -9,9 +8,9 @@
     --primary-contrast: #ffffff;
     --border: rgba(0,0,0,.08);
     --hover: rgba(13,110,253,.06);
-    --ok: 25,135,84; /* success */
-    --warn: 255,193,7; /* warning */
-    --err: 220,53,69; /* danger */
+    --ok: 25,135,84;
+    --warn: 255,193,7;
+    --err: 220,53,69;
 }
 
 html[data-theme="dark"] {
@@ -26,7 +25,6 @@ html[data-theme="dark"] {
     --hover: rgba(255,255,255,.06);
 }
 
-/* ===== Global ===== */
 html, body {
     height: 100%;
 }
@@ -47,7 +45,6 @@ footer {
     color: var(--muted);
 }
 
-/* ===== Cards y tablas ===== */
 .container {
     max-width: 1080px;
 }
@@ -67,8 +64,7 @@ footer {
     color: var(--text);
 }
 
-    .table td,
-    .table th {
+    .table td, .table th {
         color: var(--text) !important;
     }
 
@@ -83,7 +79,6 @@ footer {
         background: var(--hover);
     }
 
-/* Ajustes extra para modo oscuro */
 html[data-theme="dark"] .table thead th {
     background-color: #2a2f36;
 }
@@ -92,7 +87,6 @@ html[data-theme="dark"] .table tbody tr:nth-child(odd) {
     background-color: #22262c;
 }
 
-/* ===== Formularios ===== */
 .form-control, .form-select {
     background: var(--card);
     color: var(--text);
@@ -109,7 +103,6 @@ html[data-theme="dark"] .table tbody tr:nth-child(odd) {
     color: var(--muted);
 }
 
-/* ===== Botones ===== */
 .btn {
     border-radius: .75rem;
 }
@@ -126,7 +119,6 @@ html[data-theme="dark"] .table tbody tr:nth-child(odd) {
     border-color: rgba(255,255,255,.35);
 }
 
-/* ===== Badges ===== */
 .badge.rounded-pill {
     padding: .4rem .75rem;
     border: 1px solid var(--border);
@@ -147,7 +139,6 @@ html[data-theme="dark"] .table tbody tr:nth-child(odd) {
     color: rgb(var(--err)) !important;
 }
 
-/* ===== Navbar ===== */
 .bg-primary {
     background-color: var(--primary) !important;
 }
@@ -167,7 +158,6 @@ html[data-theme="dark"] .table tbody tr:nth-child(odd) {
     text-underline-offset: 6px;
 }
 
-/* Buscador en navbar */
 .navbar .form-control.form-control-sm {
     background: rgba(255,255,255,.15);
     color: #fff;
@@ -184,19 +174,16 @@ html[data-theme="dark"] .navbar .form-control.form-control-sm {
     color: rgba(255,255,255,.75);
 }
 
-/* ===== Alerts ===== */
 .alert {
     border-radius: 1rem;
     border: 1px solid var(--border);
 }
 
-/* ===== Footer ===== */
 footer .container {
     border-top: 1px solid var(--border);
     padding-top: 1rem;
 }
 
-/* ===== Logo punto ===== */
 .logo-dot {
     width: 10px;
     height: 10px;

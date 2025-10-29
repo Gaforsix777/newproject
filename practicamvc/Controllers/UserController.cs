@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using practicamvc.Data;
 using practicamvc.Models;
 using practicamvc.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace practicamvc.Controllers
 {
@@ -21,40 +21,25 @@ namespace practicamvc.Controllers
             _db = db;
         }
 
-        // Método privado para hashear contraseñas con PBKDF2
         private (string Hash, string Salt) HashPassword(string password)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
             string saltB64 = Convert.ToBase64String(salt);
-
             string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
-
+                password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
             return (hash, saltB64);
         }
 
-        // Método privado para verificar contraseñas
         private bool VerifyPassword(string password, string saltB64, string expectedHash)
         {
             byte[] salt = Convert.FromBase64String(saltB64);
-
             string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
-
+                password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
             return CryptographicOperations.FixedTimeEquals(
                 Convert.FromBase64String(hash),
                 Convert.FromBase64String(expectedHash));
         }
 
-        // GET: /User/Login
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
@@ -62,28 +47,22 @@ namespace practicamvc.Controllers
             return View(new LoginVM { ReturnUrl = returnUrl });
         }
 
-        // POST: /User/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVM vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
+            if (!ModelState.IsValid) return View(vm);
 
-            var user = await _db.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u =>
-                    u.UserName == vm.UserOrEmail || u.Email == vm.UserOrEmail);
+            var user = await _db.Users.AsNoTracking()
+                .FirstOrDefaultAsync(u => u.UserName == vm.UserOrEmail || u.Email == vm.UserOrEmail);
 
-            if (user == null || !user.IsActive ||
-                !VerifyPassword(vm.Password, user.Salt, user.PasswordHash))
+            if (user == null || !user.IsActive || !VerifyPassword(vm.Password, user.Salt, user.PasswordHash))
             {
                 ModelState.AddModelError(string.Empty, "Credenciales inválidas.");
                 return View(vm);
             }
 
-            // Crear claims del usuario
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -95,9 +74,7 @@ namespace practicamvc.Controllers
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
                 new AuthenticationProperties
                 {
                     IsPersistent = vm.RememberMe,
@@ -110,7 +87,6 @@ namespace practicamvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: /User/Register
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -118,22 +94,23 @@ namespace practicamvc.Controllers
             return View(new RegisterVM());
         }
 
-        // POST: /User/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM vm)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return View(vm);
+
+            if (vm.UserName.Contains(' '))
+            {
+                ModelState.AddModelError(nameof(vm.UserName), "El nombre de usuario no puede contener espacios.");
                 return View(vm);
+            }
 
-            bool exists = await _db.Users
-                .AnyAsync(u => u.UserName == vm.UserName || u.Email == vm.Email);
-
+            bool exists = await _db.Users.AnyAsync(u => u.UserName == vm.UserName || u.Email == vm.Email);
             if (exists)
             {
-                ModelState.AddModelError(string.Empty,
-                    "El usuario o email ya existe.");
+                ModelState.AddModelError(string.Empty, "Usuario o email ya existe.");
                 return View(vm);
             }
 
@@ -145,19 +122,17 @@ namespace practicamvc.Controllers
                 Email = vm.Email,
                 PasswordHash = hash,
                 Salt = salt,
-                Role = "User",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                Role = vm.Role,
+                IsActive = true
             };
 
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Cuenta creada exitosamente. Por favor inicia sesión.";
+            TempData["Success"] = "Cuenta creada, ahora inicia sesión.";
             return RedirectToAction(nameof(Login));
         }
 
-        // GET: /User/Logout
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -165,7 +140,6 @@ namespace practicamvc.Controllers
             return RedirectToAction(nameof(Login));
         }
 
-        // GET: /User/AccessDenied
         [HttpGet]
         public IActionResult AccessDenied()
         {

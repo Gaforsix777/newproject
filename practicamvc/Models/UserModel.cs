@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace practicamvc.Models
 {
     public class UserModel
     {
+        public const string RolCliente = "Cliente";
+        public const string RolProveedor = "Proveedor";
+
         [Key]
         public int Id { get; set; }
 
@@ -20,8 +22,8 @@ namespace practicamvc.Models
         [Required, MaxLength(200)]
         public string Salt { get; set; } = string.Empty;
 
-        [MaxLength(50)]
-        public string Role { get; set; } = "User";
+        [Required, MaxLength(50)]
+        public string Role { get; set; } = RolCliente;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

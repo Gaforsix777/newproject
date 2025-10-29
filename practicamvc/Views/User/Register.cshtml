@@ -2,55 +2,61 @@
 @{
     ViewData["Title"] = "Registro";
 }
-
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card mt-5">
-            <div class="card-header">
-                <h2>Crear Cuenta</h2>
+        <div class="card mt-5 shadow-sm border-0 rounded-4">
+            <div class="card-header bg-primary text-white rounded-top-4">
+                <h2 class="mb-0">Crear Cuenta</h2>
             </div>
             <div class="card-body">
-                <form asp-action="Register" method="post">
-
+                <form asp-action="Register" method="post" novalidate>
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label asp-for="UserName" class="form-label"></label>
-                        <input asp-for="UserName" class="form-control" placeholder="Elige un nombre de usuario" />
+                        <input asp-for="UserName" class="form-control" placeholder="sin espacios" />
+                        <small class="text-muted">Sin espacios. Usa letras, números, guion o guion bajo.</small>
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label asp-for="Email" class="form-label"></label>
                         <input asp-for="Email" class="form-control" placeholder="tu@email.com" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label asp-for="Password" class="form-label"></label>
-                        <input asp-for="Password" class="form-control" placeholder="Mínimo 6 caracteres" />
+                        <input asp-for="Password" class="form-control" placeholder="mínimo 6 caracteres" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label asp-for="ConfirmPassword" class="form-label"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Repite tu contraseña" />
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="repite tu contraseña" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Crear Cuenta</button>
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label"></label>
+                        <select asp-for="Role" class="form-select">
+                            <option value="@practicamvc.Models.UserModel.RolCliente">Cliente</option>
+                            <option value="@practicamvc.Models.UserModel.RolProveedor">Proveedor</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
 
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-round">Crear Cuenta</button>
+                    </div>
                     <div class="text-center mt-3">
-                        <p>¿Ya tienes cuenta? <a asp-action="Login">Inicia sesión aquí</a></p>
+                        <a asp-action="Login">Ya tengo cuenta</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<partial name="_ValidationScriptsPartial" />
+ }

@@ -12,15 +12,14 @@ namespace practicamvc.Data
         public DbSet<PedidoModel> Pedidos { get; set; }
         public DbSet<DetallePedidoModel> DetallePedidos { get; set; }
 
-        // ⭐ NUEVO: Agrega esta línea
+        // NUEVO
         public DbSet<UserModel> Users { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ⭐ NUEVO: Agrega estas configuraciones para Users
+            // NUEVO - Índices únicos
             modelBuilder.Entity<UserModel>()
                 .HasIndex(u => u.UserName)
                 .IsUnique();
@@ -29,7 +28,7 @@ namespace practicamvc.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Tus configuraciones existentes
+            // ... resto de tu configuración existente
             modelBuilder.Entity<ProductoModel>()
                 .Property(p => p.Precio)
                 .HasColumnType("decimal(10,2)");

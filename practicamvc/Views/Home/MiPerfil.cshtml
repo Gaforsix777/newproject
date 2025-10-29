@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Mi Perfil";
+}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h2 class="mb-0">Mi Perfil</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <strong>Usuario:</strong> @User.Identity?.Name
+            </div>
+            <div class="mb-3">
+                <strong>Email:</strong> @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+            </div>
+            <div class="mb-3">
+                <strong>Rol:</strong> @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+            </div>
+            <a asp-action="Index" class="btn btn-primary btn-round">Volver al Inicio</a>
+        </div>
+    </div>
+</div>

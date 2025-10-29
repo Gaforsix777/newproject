@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-info text-white rounded-top-4">
+            <h2 class="mb-0">Dashboard General</h2>
+        </div>
+        <div class="card-body">
+            <p>Hola, <strong>@User.Identity?.Name</strong></p>
+            <p>Rol: <strong>@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</strong></p>
+            <p>Esta página es accesible para Clientes y Proveedores autenticados.</p>
+        </div>
+    </div>
+</div>

@@ -1,29 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using practicamvc.Models;
 
 namespace practicamvc.ViewModels
 {
     public class RegisterVM
     {
-        [Required(ErrorMessage = "El nombre de usuario es requerido")]
-        [MaxLength(100)]
-        [Display(Name = "Usuario")]
+        [Required, MaxLength(100), Display(Name = "Usuario")]
+        [RegularExpression(@"^\S+$", ErrorMessage = "El nombre de usuario no puede contener espacios")]
         public string UserName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El email es requerido")]
-        [EmailAddress(ErrorMessage = "Email inválido")]
-        [Display(Name = "Email")]
+        [Required, EmailAddress, Display(Name = "Email")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La contraseña es requerida")]
-        [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
-        [Display(Name = "Contraseña")]
+        [Required, DataType(DataType.Password), MinLength(6), Display(Name = "Contraseña")]
         public string Password { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Confirmar contraseña es requerido")]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coinciden")]
-        [Display(Name = "Confirmar Contraseña")]
+        [Required, DataType(DataType.Password), Compare(nameof(Password)), Display(Name = "Confirmar Contraseña")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        [Required, Display(Name = "Rol")]
+        public string Role { get; set; } = UserModel.RolCliente;
     }
 }

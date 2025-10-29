@@ -16,7 +16,6 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
@@ -31,24 +30,10 @@
             <div id="mainNav" class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link @(currentController=="ProductoModels"||currentController=="Producto" ? "active" : "")"
-                           asp-controller="ProductoModels" asp-action="Index">Productos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(currentController=="ClienteModels" ? "active" : "")"
-                           asp-controller="ClienteModels" asp-action="Index">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(currentController=="PedidoModels" ? "active" : "")"
-                           asp-controller="PedidoModels" asp-action="Index">Pedidos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(currentController=="DetallePedidoModels" ? "active" : "")"
-                           asp-controller="DetallePedidoModels" asp-action="Index">Detalles</a>
+                        <a class="nav-link @(currentController=="Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Inicio</a>
                     </li>
                 </ul>
 
-                <!-- Buscador global -->
                 <form class="d-none d-lg-flex me-3" method="get" asp-controller="@currentController" asp-action="Index" role="search">
                     <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
                 </form>
@@ -56,7 +41,6 @@
                     <input class="form-control form-control-sm" type="search" name="buscar" placeholder="Buscar..." />
                 </form>
 
-                <!-- ⭐ NUEVO: Menú de Usuario (Login/Logout) -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
@@ -76,20 +60,21 @@
                                     </span>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                @if (User.IsInRole("Admin"))
+
+                                @if (User.IsInRole(practicamvc.Models.UserModel.RolCliente))
                                 {
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            ⚙️ Panel Admin
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="PanelCliente">📊 Panel Cliente</a></li>
                                 }
-                                <li>
-                                    <a class="dropdown-item" asp-controller="User" asp-action="Logout">
-                                        🚪 Cerrar Sesión
-                                    </a>
-                                </li>
+                                @if (User.IsInRole(practicamvc.Models.UserModel.RolProveedor))
+                                {
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="PanelProveedor">📊 Panel Proveedor</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">📦 Mis Productos</a></li>
+                                }
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Dashboard">📈 Dashboard</a></li>
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="MiPerfil">👥 Mi Perfil</a></li>
+
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="User" asp-action="Logout">🚪 Cerrar Sesión</a></li>
                             </ul>
                         </li>
                     }
@@ -97,22 +82,19 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link @(currentController=="User" && currentAction=="Login" ? "active" : "")"
-                               asp-controller="User"
-                               asp-action="Login">
+                               asp-controller="User" asp-action="Login">
                                 🔑 Ingresar
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(currentController=="User" && currentAction=="Register" ? "active" : "")"
-                               asp-controller="User"
-                               asp-action="Register">
+                               asp-controller="User" asp-action="Register">
                                 📝 Registrarse
                             </a>
                         </li>
                     }
                 </ul>
 
-                <!-- Toggle tema -->
                 <button id="themeToggle" class="btn btn-outline-light btn-sm ms-2" type="button" title="Cambiar tema">
                     🌙
                 </button>
@@ -120,7 +102,6 @@
         </div>
     </nav>
 
-    <!-- Alerts TempData -->
     <div class="container mt-3">
         @if (TempData["Success"] is string ok && !string.IsNullOrWhiteSpace(ok))
         {
@@ -138,12 +119,10 @@
         }
     </div>
 
-    <!-- Main -->
     <main class="container py-4">
         @RenderBody()
     </main>
 
-    <!-- Footer -->
     <footer class="py-4 mt-auto">
         <div class="container d-flex flex-wrap gap-2 justify-content-between align-items-center text-muted small">
             <span>© @DateTime.Now.Year — Artesanías</span>
@@ -155,13 +134,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- Tema claro/oscuro persistente ---
         (function () {
             const root = document.documentElement;
             const key = "artesanias-theme";
             const btn = document.getElementById("themeToggle");
 
-            // Primera carga: respeta preferencia del SO si no hay guardado
             if (!localStorage.getItem(key)) {
                 const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
                 localStorage.setItem(key, prefersDark ? 'dark' : 'light');

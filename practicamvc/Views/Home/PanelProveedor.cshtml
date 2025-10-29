@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Panel Proveedor";
+}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-success text-white rounded-top-4">
+            <h2 class="mb-0">Panel Proveedor</h2>
+        </div>
+        <div class="card-body">
+            <p>Hola, <strong>@User.Identity?.Name</strong></p>
+            <p>Bienvenido al panel de proveedor. Aquí puedes gestionar tus productos.</p>
+            <a asp-controller="Producto" asp-action="Index" class="btn btn-success btn-round">Ver mis productos</a>
+        </div>
+    </div>
+</div>
