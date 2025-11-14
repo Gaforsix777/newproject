@@ -1,0 +1,79 @@
+
+Haciendo ping a 8.8.8.8 con 32 bytes de datos:
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Error general.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Tiempo de espera agotado para esta solicitud.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+Respuesta desde 10.57.229.100: Host de destino inaccesible.
+
+Estad¡sticas de ping para 8.8.8.8:
+    Paquetes: enviados = 72, recibidos = 36, perdidos = 36
+    (50% perdidos),
+Control-C
